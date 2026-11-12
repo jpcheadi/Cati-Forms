@@ -1,0 +1,45 @@
+/* base.css — tokens (variáveis), reset, tipografia e layout geral */
+:root {
+  --azul-50: #F1F8FE;
+  --azul-100: #DDEFFC;
+  --azul-300: #9DD2F7;   /* azul claro principal */
+  --azul-500: #4FA8E8;
+  --branco: #FFFFFF;
+  --preto: #000000;
+  --cinza: #4B5560;
+  --erro: #B3261E;
+
+  --fonte-titulo: "Bricolage Grotesque", Georgia, sans-serif;
+  --fonte-texto: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --borda: 2px solid var(--preto);
+  --raio-s: 8px;
+  --raio-m: 14px;
+  --esp-1: .5rem;
+  --esp-2: 1rem;
+  --esp-3: 1.5rem;
+  --esp-4: 2.5rem;
+}
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: var(--fonte-texto);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--preto);
+  background: var(--azul-50);
+}
+h1, h2, h3 { font-family: var(--fonte-titulo); line-height: 1.15; margin: 0 0 var(--esp-2); letter-spacing: -.02em; }
+h1 { font-size: clamp(1.9rem, 5vw, 2.8rem); font-weight: 800; }
+h2 { font-size: 1.5rem; font-weight: 700; }
+h3 { font-size: 1.15rem; font-weight: 700; }
+p { margin: 0 0 var(--esp-2); max-width: 65ch; }
+a { color: inherit; text-decoration-color: var(--azul-500); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+:focus-visible { outline: 3px solid var(--preto); outline-offset: 2px; }
+.container { width: min(100% - 2rem, 52rem); margin-inline: auto; }
+.page { padding-block: var(--esp-4); }
+.stack > * + * { margin-top: var(--esp-2); }
+.muted { color: var(--cinza); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+[hidden] { display: none !important; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }

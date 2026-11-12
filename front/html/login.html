@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Entrar · CATI Forms</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Instrument+Sans:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="../css/style.css"><link rel="stylesheet" href="../css/components.css">
+</head>
+<body class="auth">
+<main class="auth__box card">
+  <h1>Entrar</h1>
+  <p class="muted">Acesse para criar e consultar formulários.</p>
+  <div id="msg" class="alert alert--erro" role="alert" hidden></div>
+  <form id="form-login" novalidate>
+    <label class="field"><span>Usuário</span><input id="user" type="text" name="username" autocomplete="username" required></label>
+    <label class="field"><span>Senha</span><input id="pass" type="password" name="senha" autocomplete="current-password" required></label>
+    <button id="btn-entrar" class="btn btn-dark btn-block" type="submit">Entrar</button>
+  </form>
+  <p class="muted" style="margin:1rem 0 0">Ainda não tem conta? <a href="cadastro.html">Criar conta</a></p>
+</main>
+<script src="../js/Api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/login.js
+"></script>
+</body>
+</html>

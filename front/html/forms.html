@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Responder Formulário · CATI Forms</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Instrument+Sans:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/components.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="container topbar__inner"><span class="brand">CATI <span>Forms</span></span></div>
+</header>
+
+<main class="container page">
+  <div id="msg" class="alert alert--erro" role="alert" hidden></div>
+  
+  <!-- O título e descrição começam aguardando os dados do backend -->
+  <header class="stack">
+    <h1 id="titulo">Carregando formulário...</h1>
+    <p id="descricao" class="muted"></p>
+  </header>
+
+  <!-- O formulário inteiro começa oculto até as perguntas serem carregadas -->
+  <form id="form-responder" novalidate class="stack" style="margin-top:1.5rem" hidden>
+    
+    <!-- O campo de email começa oculto (RF07: opcional) -->
+    <label class="field card" id="campo-email" hidden>
+      <span>Seu e-mail</span>
+      <input type="email" name="email" id="input-email" autocomplete="email">
+    </label>
+
+    <!-- A lista de perguntas começa vazia. O JavaScript vai injetar os clones aqui. -->
+    <div id="lista-perguntas" class="stack"></div>
+    
+    <button class="btn btn-dark btn-block" type="submit">Enviar respostas</button>
+  </form>
+
+  <section id="sucesso" class="card card--azul" hidden>
+    <h2>Respostas enviadas</h2>
+    <p>Obrigado por participar.</p>
+  </section>
+</main>
+
+<!-- TEMPLATES: Moldes para as perguntas         -->
+
+<!-- Molde: Pergunta Discursiva -->
+<template id="tpl-resp-discursiva">
+  <section class="card">
+    <label class="field" style="margin:0">
+      <span data-enunciado></span>
+      <textarea data-input required></textarea>
+    </label>
+  </section>
+</template>
+
+<!-- Molde: Pergunta Múltipla Escolha -->
+<template id="tpl-resp-multipla">
+  <fieldset class="card">
+    <legend data-enunciado></legend>
+    <!-- As opções em checkbox serão injetadas nesta div -->
+    <div data-lista-opcoes class="stack" style="margin-top: 0.5rem"></div>
+  </fieldset>
+</template>
+
+<!-- Molde: Pergunta Escolha Única com Justificativa -->
+<template id="tpl-resp-unica">
+  <fieldset class="card">
+    <legend data-enunciado></legend>
+    <!-- As opções em radio serão injetadas nesta div -->
+    <div data-lista-opcoes class="stack" style="margin-top: 0.5rem"></div>
+    
+    <label class="field" style="margin:1rem 0 0">
+      <span>Justifique sua escolha</span>
+      <textarea data-justificativa required></textarea>
+    </label>
+  </fieldset>
+</template>
+
+<!-- Molde auxiliar: Opção Checkbox (Para Múltipla Escolha) -->
+<template id="tpl-opcao-checkbox">
+  <label class="choice">
+    <input type="checkbox" data-input> <span data-texto></span>
+  </label>
+</template>
+
+<!-- Molde auxiliar: Opção Radio (Para Escolha Única) -->
+<template id="tpl-opcao-radio">
+  <label class="choice">
+    <input type="radio" data-input> <span data-texto></span>
+  </label>
+</template>
+
+<script src="../js/forms.js"></script>
+</body>
+</html>

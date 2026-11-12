@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Novo formulário · CATI Forms</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Instrument+Sans:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="../css/style.css"><link rel="stylesheet" href="../css/components.css">
+</head>
+<body>
+<header class="topbar"><div class="container topbar__inner">
+  <a class="brand" href="dashboard.html">CATI <span>Forms</span></a>
+  <nav class="nav"><a href="dashboard.html">Formulários</a><a class="btn btn-sm" href="criar-formulario.html">Novo formulário</a><button class="btn btn-dark btn-sm" id="btn-sair" type="button">Sair</button></nav>
+</div></header>
+<main class="container page">
+  <h1>Novo formulário</h1>
+  <div id="msg" class="alert alert--erro" role="alert" hidden></div>
+  <form id="form-criar" novalidate class="stack">
+    <section class="card">
+      <label class="field"><span>Título</span><input type="text" name="titulo" required></label>
+      <label class="field"><span>Descrição</span><textarea name="descricao" required></textarea></label>
+      <label class="choice"><input type="checkbox" name="solicitaEmail"> Pedir o e-mail de quem responder</label>
+    </section>
+
+    <h2>Perguntas</h2>
+    <p class="muted">Todas as perguntas são obrigatórias para quem responde.</p>
+    <div id="lista-perguntas" class="stack"></div>
+
+    <section class="card card--azul">
+      <h3>Adicionar pergunta</h3>
+      <div class="row">
+        <button class="btn btn-light" type="button" data-add="DISCURSIVA">Discursiva</button>
+        <button class="btn btn-light" type="button" data-add="MULTIPLA_ESCOLHA">Múltipla escolha</button>
+        <button class="btn btn-light" type="button" data-add="ESCOLHA_UNICA_JUSTIFICADA">Escolha única com justificativa</button>
+      </div>
+    </section>
+    <button class="btn btn-dark" type="submit">Criar formulário</button>
+  </form>
+  <ul id="lista-perguntas"></ul>
+
+  <section id="resultado" class="card card--azul" hidden>
+    <h2>Formulário criado</h2>
+    <p>Compartilhe este link com quem vai responder:</p>
+    <div class="row"><input type="text" id="link-gerado" readonly><button class="btn btn-sm" id="btn-copiar" type="button">Copiar link</button></div>
+  </section>
+</main>
+
+<!-- Modelos: o JavaScript clona estes blocos para cada pergunta/opção -->
+<template id="tpl-pergunta">
+  <article class="card question">
+    <div class="question__head"><span class="badge" data-tipo></span><button class="btn btn-light btn-sm" type="button" data-remover>Remover</button></div>
+    <label class="field"><span>Enunciado</span><input type="text" data-enunciado required></label>
+    <div data-opcoes hidden>
+      <span class="field"><span>Opções (mínimo 2)</span></span>
+      <div data-lista-opcoes></div>
+      <button class="btn btn-light btn-sm" type="button" data-add-opcao>Adicionar opção</button>
+    </div>
+  </article>
+</template>
+<template id="tpl-opcao">
+  <div class="option-row"><input type="text" data-opcao aria-label="Texto da opção"><button class="btn btn-light btn-sm" type="button" data-remover-opcao aria-label="Remover opção">×</button></div>
+</template>
+<script src="../js/criar-formulario.js"></script>
+<script>
+        // O Segurança age antes de carregar o resto da página
+        Auth.protegerPagina();
+    </script>
+</body>
+</html>

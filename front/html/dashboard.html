@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Formulários · CATI Forms</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Instrument+Sans:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="../css/style.css"><link rel="stylesheet" href="../css/components.css">
+</head>
+<body>
+<header class="topbar"><div class="container topbar__inner">
+  <a class="brand" href="dashboard.html">CATI <span>Forms</span></a>
+  <nav class="nav"><a href="dashboard.html">Formulários</a><a class="btn btn-sm" href="criar-formulario.html">Novo formulário</a><button class="btn btn-dark btn-sm" id="btn-sair" type="button">Sair</button></nav>
+</div></header>
+<main class="container page">
+  <div class="row row--between"><h1>Formulários</h1><a class="btn" href="criar-formulario.html">Novo formulário</a></div>
+  <div id="msg" class="alert alert--erro" role="alert" hidden></div>
+  <section id="lista-formularios" class="grid grid--2" aria-label="Lista de formulários">
+    <!-- Exemplo estático: o JavaScript vai gerar um card por formulário -->
+    <article class="card">
+      <h2>Banco de Talentos 2026</h2>
+      <p class="muted">Conte um pouco sobre você.</p>
+      <div class="row row--between"><span class="badge">12 respostas</span><span class="muted">por maria</span></div>
+      <div class="row" style="margin-top:1rem"><a class="btn btn-sm" href="respostas.html?id=7">Ver respostas</a><button class="btn btn-light btn-sm" type="button" data-copiar="3f1b2c9e">Copiar link</button></div>
+    </article>
+  </section>
+  <div id="vazio" class="empty" hidden><h2>Nenhum formulário ainda</h2><p style="margin-inline:auto">Crie o primeiro e compartilhe o link.</p><a class="btn" href="criar-formulario.html">Criar formulário</a></div>
+</main>
+<script src="../js/dashboard.js"></script>
+<script>
+        // O Segurança age antes de carregar o resto da página
+        Auth.protegerPagina();
+    </script>
+</body>
+</html>
