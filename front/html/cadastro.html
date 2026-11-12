@@ -14,12 +14,14 @@
   <p class="muted">Escolha um usuário único e uma senha.</p>
   <div id="msg" class="alert alert--erro" role="alert" hidden></div>
   <form id="form-cadastro" novalidate>
-    <label class="field"><span>Usuário</span><input type="text" name="username" autocomplete="username" required></label>
-    <label class="field"><span>Senha</span><input type="password" name="senha" autocomplete="new-password" required></label>
+    <label class="field"><span>Usuário</span><input id="input-username" type="text" name="username" autocomplete="username" required></label>
+    <label class="field"><span>Senha</span><input id="input-pass" type="password" name="senha" autocomplete="new-password" required></label>
     <button class="btn btn-dark btn-block" type="submit">Criar conta</button>
   </form>
   <p class="muted" style="margin:1rem 0 0">Já tem conta? <a href="login.html">Entrar</a></p>
 </main>
+<script src="../js/auth.js"></script>
+<script src="../js/api.js"></script>
 <script src="../js/cadastro.js"></script>
 </body>
 </html>

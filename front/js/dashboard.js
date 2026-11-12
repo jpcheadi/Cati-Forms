@@ -1,6 +1,13 @@
 (() => {
   const lista = document.getElementById("lista-formularios");
   const vazio = document.getElementById("vazio");
+  // Botão de Sair (Logout)
+  const btnSair = document.getElementById("btn-sair");
+  if (btnSair) {
+      btnSair.addEventListener("click", () => {
+          Auth.sair();
+      });
+  }
 
   function desenharCard(f) {
     const total = `${f.totalRespostas} resposta${f.totalRespostas === 1 ? "" : "s"}`;

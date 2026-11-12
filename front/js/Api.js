@@ -1,8 +1,7 @@
 /* Api.js — única camada que fala com o backend (contrato da API v1).
    Regra: aqui só existe fetch, nunca DOM. As páginas chamam Api.xxx() e
    decidem sozinhas o que mostrar na tela. */
-const API_BASE = "http://localhost:8080/api"; 
-
+const API_BASE = "http://localhost:8080/api";
 // Erro padronizado: todo problema vira um ApiError com status, mensagem e campos.
 class ApiError extends Error {
   constructor(status, dados) {
@@ -17,7 +16,7 @@ async function requisitar(metodo, caminho, corpo) {
   const ehLogin = caminho === "/auth/login";
   const headers = {};
   if (corpo !== undefined) headers["Content-Type"] = "application/json";
-  if (!ehPublica) {
+  if (!ehPublica && !ehLogin) {
     const token = Auth.token();
     if (token) headers["Authorization"] = `Bearer ${token}`;
   }
@@ -53,10 +52,10 @@ const Api = {
   },
 
   // Formulários (RF03–RF08, RF14) — rotas protegidas, usam id
-  criarFormulario: (formulario) => requisitar("POST", "/forms", formulario),
-  listarFormularios: () => requisitar("GET", "/forms"),
-  detalharFormulario: (id) => requisitar("GET", `/forms/${id}`),
-  listarRespostas: (id) => requisitar("GET", `/forms/${id}/responses`),
+  criarFormulario: (formulario) => requisitar("POST", "/formularios", formulario),
+  listarFormularios: () => requisitar("GET", "/formularios"),
+  detalharFormulario: (id) => requisitar("GET", `/formularios/${id}`),
+  listarRespostas: (id) => requisitar("GET", `/formularios/${id}/respostas`),
 
   // Rotas públicas (RF09–RF13) — usam o codigo (UUID), sem token
   buscarFormularioPublico: (codigo) => requisitar("GET", `/public/forms/${encodeURIComponent(codigo)}`),

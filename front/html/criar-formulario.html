@@ -18,9 +18,9 @@
   <div id="msg" class="alert alert--erro" role="alert" hidden></div>
   <form id="form-criar" novalidate class="stack">
     <section class="card">
-      <label class="field"><span>Título</span><input type="text" name="titulo" required></label>
-      <label class="field"><span>Descrição</span><textarea name="descricao" required></textarea></label>
-      <label class="choice"><input type="checkbox" name="solicitaEmail"> Pedir o e-mail de quem responder</label>
+      <label class="field"><span>Título</span><input id="input-titulo" type="text" name="titulo" required></label>
+      <label class="field"><span>Descrição</span><textarea id="input-descricao" name="descricao" required></textarea></label>
+      <label class="choice"><input id="check-email" type="checkbox" name="solicitaEmail"> Pedir o e-mail de quem responder</label>
     </section>
 
     <h2>Perguntas</h2>
@@ -61,10 +61,9 @@
 <template id="tpl-opcao">
   <div class="option-row"><input type="text" data-opcao aria-label="Texto da opção"><button class="btn btn-light btn-sm" type="button" data-remover-opcao aria-label="Remover opção">×</button></div>
 </template>
+<script src="../js/auth.js">Auth.protegerPagina();</script>
 <script src="../js/criar-formulario.js"></script>
-<script>
-        // O Segurança age antes de carregar o resto da página
-        Auth.protegerPagina();
-    </script>
+<script src="../js/api.js"></script>
+<script src="../js/criar-formulario.js"></script>
 </body>
 </html>

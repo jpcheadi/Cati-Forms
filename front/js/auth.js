@@ -1,70 +1,34 @@
+// auth.js — Gerenciamento centralizado da Sessão e do Token JWT
 const API_AUTH_URL = "http://localhost:8080/api/auth";
 
 const Auth = {
-    /**
-     * Realiza a requisição de autenticação na API.
-     * @param {string} username - Nome de usuário fornecido na interface.
-     * @param {string} senha - Senha fornecida na interface.
-     * @returns {Promise<boolean>} - Retorna true em caso de sucesso (HTTP 200 OK), false caso contrário.
-     */
-    async login(username, senha) {
-        try {
-            const response = await fetch(`${API_AUTH_URL}/login`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ username, senha })
-            });
+    // Retorna o token salvo no navegador
+    token() {
+        return localStorage.getItem("authToken");
+    },
 
-            if (response.ok) {
-                const data = await response.json();
-                // Armazena o token JWT retornado pelo backend (RF01/RF02)
-                localStorage.setItem("authToken", data.token);
-                return true; 
-            }
-            
-            return false; 
-        } catch (error) {
-            console.error("Erro de comunicação com a API de autenticação:", error);
-            return false;
+    // Retorna o nome do usuário logado
+    usuarioLogado() {
+        return localStorage.getItem("authUsername");
+    },
+
+    // Salva a sessão após o login bem-sucedido
+    salvarSessao(token, username) {
+        localStorage.setItem("authToken", token);
+        if (username) {
+            localStorage.setItem("authUsername", username);
         }
     },
 
-    /**
-     * Verifica a presença de um token de sessão válido no armazenamento local.
-     * @returns {boolean}
-     */
-    estaLogado() {
-        return localStorage.getItem("authToken") !== null;
-    },
-
-    /**
-     * Valida o estado de autenticação e redireciona usuários não autorizados.
-     * Deve ser invocada no carregamento de rotas protegidas.
-     */
-    protegerPagina() {
-        if (!this.estaLogado()) {
-            window.location.href = "login.html"; 
-        }
-    },
-
-    /**
-     * Invalida a sessão atual no lado do cliente e redireciona para o login.
-     */
-    logout() {
+    // Remove a sessão e manda o usuário de volta para o login
+    sair() {
         localStorage.removeItem("authToken");
-        window.location.href = "login.html";
+        localStorage.removeItem("authUsername");
+        window.location.href = "login.html"; // Ajuste o caminho se necessário
+    },
+
+    // Verifica se o usuário está autenticado
+    estaAutenticado() {
+        return !!this.token();
     }
 };
-
-// Configuração de escutadores de eventos globais de autenticação
-document.addEventListener("DOMContentLoaded", () => {
-    const botaoSair = document.getElementById("btn-sair");
-
-    if (botaoSair) {
-        botaoSair.addEventListener("click", () => {
-            Auth.logout();
-        });
-    }
-});

@@ -27,7 +27,6 @@ const UI = {
   },
 
   linkResposta(codigo) {
-    // Monta uma URL apontando para a página de resposta pública com o parâmetro do formulário
     return `${window.location.origin}/front/html/forms.html?id=${codigo}`;
   },
 
@@ -45,6 +44,14 @@ const UI = {
   }
 };
 
+// Botão de Sair (Logout)
+const btnSair = document.getElementById("btn-sair");
+if (btnSair) {
+    btnSair.addEventListener("click", () => {
+        Auth.sair();
+    });
+}
+
 // 2. Mapeamento dos tipos de perguntas
 const TIPOS_PERGUNTA = {
   DISCURSIVA: "Discursiva",
@@ -59,30 +66,24 @@ function adicionarPergunta(tipo) {
 
   if (!tplPergunta || !listaPerguntas) return;
 
-  // Clona o nó HTML do template
   const bloco = tplPergunta.content.firstElementChild.cloneNode(true);
   bloco.dataset.tipoPergunta = tipo;
 
-  // Define o rótulo (badge) do tipo de pergunta
   const badge = bloco.querySelector("[data-tipo]");
   if (badge) badge.textContent = TIPOS_PERGUNTA[tipo] || tipo;
 
-  // Configura a área de opções para múltipla escolha ou escolha única
   const dataOpcoes = bloco.querySelector("[data-opcoes]");
   if (tipo !== "DISCURSIVA" && dataOpcoes) {
     dataOpcoes.hidden = false;
-    // Adiciona 2 opções iniciais por padrão
     adicionarOpcao(bloco);
     adicionarOpcao(bloco);
   }
 
-  // Evento do botão "Remover Pergunta"
   const btnRemover = bloco.querySelector("[data-remover]");
   if (btnRemover) {
     btnRemover.addEventListener("click", () => bloco.remove());
   }
 
-  // Evento do botão "Adicionar opção"
   const btnAddOpcao = bloco.querySelector("[data-add-opcao]");
   if (btnAddOpcao) {
     btnAddOpcao.addEventListener("click", () => adicionarOpcao(bloco));
@@ -146,7 +147,8 @@ function montarDadosFormulario() {
 
     if (tipo !== "DISCURSIVA") {
       const camposOpcao = [...bloco.querySelectorAll("[data-opcao]")];
-      const textosOpcao = camposOpcao.map((input) => input.value.trim());
+      const opcoesObj = camposOpcao.map((input) => ({ texto: input.value.trim() }));
+      const textosOpcao = opcoesObj.map(o => o.texto);
       const opcaoVaziaIndex = textosOpcao.findIndex((texto) => !texto);
 
       if (opcaoVaziaIndex !== -1) {
@@ -155,7 +157,7 @@ function montarDadosFormulario() {
           foco: camposOpcao[opcaoVaziaIndex]
         };
       }
-      itemPergunta.opcoes = textosOpcao;
+      itemPergunta.opcoes = opcoesObj;
     }
 
     perguntas.push(itemPergunta);
@@ -173,7 +175,6 @@ function montarDadosFormulario() {
 
 // 6. Inicialização e escutadores de eventos principais após o DOM carregar
 document.addEventListener("DOMContentLoaded", () => {
-  // Conecta os botões de adicionar pergunta pelo atributo data-add
   document.querySelectorAll("[data-add]").forEach((botao) => {
     botao.addEventListener("click", () => {
       UI.limparErro();
@@ -181,7 +182,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Conecta o evento de submissão do formulário
   const form = document.getElementById("form-criar");
   if (form) {
     form.addEventListener("submit", async (ev) => {
@@ -199,10 +199,10 @@ document.addEventListener("DOMContentLoaded", () => {
       UI.ocupado(btnSubmit, true);
 
       try {
-        // Simulação temporária de código gerado enquanto o Backend Spring Boot não está conectado
-        const codigoGeradoMock = "form-" + Math.random().toString(36).substring(2, 9);
-        
-        const link = UI.linkResposta(codigoGeradoMock);
+        // Envia direto usando o nosso api.js centralizado com autenticação JWT automática
+        const formularioSalvo = await Api.criarFormulario(resultado.dados);
+
+        const link = UI.linkResposta(formularioSalvo.id);
         
         const inputLink = document.getElementById("link-gerado");
         if (inputLink) inputLink.value = link;
