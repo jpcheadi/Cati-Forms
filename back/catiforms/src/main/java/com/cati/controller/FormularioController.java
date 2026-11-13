@@ -15,6 +15,7 @@ import com.cati.service.FormularioService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,16 +49,17 @@ public class FormularioController {
         return ResponseEntity.ok(form);
     }
 
-    // @PostMapping
-    // public ResponseEntity<Formulario> criarFormulario(@RequestBody FormularioRequestDTO dto) {
-    //     // A anotação @RequestBody avisa o Spring para pegar o JSON que veio no corpo 
-    //     // da requisição e converter automaticamente para o objeto FormularioRequestDTO
+    @PostMapping
+    public ResponseEntity<Formulario> criarFormulario(@RequestBody FormularioRequestDTO dto, Principal principal) {
+    //      A anotação @RequestBody avisa o Spring para pegar o JSON que veio no corpo 
+    //      da requisição e converter automaticamente para o objeto FormularioRequestDTO  
+    // O filtro do Spring Security intercepta o token de sessão, abre, lê quem é o dono dele e cria o objeto Principal
         
-    //     Formulario formCriado = service.criarFormulario(dto);
+         Formulario formCriado = service.criarFormulario(dto, principal.getName());
         
     //     // Retorna status 201 (Created) e os dados do formulário recém-criado (incluindo o UUID gerado)
-    //     return ResponseEntity.status(201).body(formCriado);
-    // }
+         return ResponseEntity.status(201).body(formCriado);
+    }
     // 2. O Candidato clica em "Enviar" e salva a Submissao
 
     // Adicione este método junto aos outros (na área que exige token JWT)
