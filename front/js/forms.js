@@ -1,7 +1,7 @@
 // js/forms.js
 
 // Endereço base do Backend em Spring Boot
-const API_BASE_URL = "http://localhost:8080/api/formularios";
+const API_BASE_URL = "http://localhost:8080/api/formularios/public/${codigo}/responses";
 let formularioAtualId = null;
 
 document.addEventListener("DOMContentLoaded", async () => {

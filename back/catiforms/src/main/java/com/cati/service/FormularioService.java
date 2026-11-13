@@ -6,11 +6,15 @@ import com.cati.dto.PerguntaDTO;
 import com.cati.model.Formulario;
 import com.cati.model.Opcao;
 import com.cati.model.Pergunta;
+import com.cati.model.Usuario;
 import com.cati.repository.FormularioRepository;
+import com.cati.repository.UsuarioRepository;
+
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.List;
 
 @Service // Indica que esta classe contém as regras de negócio
 public class FormularioService {
@@ -18,9 +22,11 @@ public class FormularioService {
     // O Service precisa do Repository para conversar com o banco. 
     // O Spring injeta essa dependência automaticamente pelo construtor.
     private final FormularioRepository repository;
+    private final UsuarioRepository usuarioRepository;
 
-    public FormularioService(FormularioRepository repository) {
+    public FormularioService(FormularioRepository repository, UsuarioRepository usuarioRepository) {
         this.repository = repository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     public Formulario buscarPorId(UUID id) {
@@ -35,11 +41,15 @@ public class FormularioService {
     }
 
     // Recebe o DTO, transforma na Entidade (Formulario) e salva no banco
-    public Formulario criarFormulario(FormularioRequestDTO dto) {
+    public Formulario criarFormulario(FormularioRequestDTO dto, String usernameLogado) {
+
+        Usuario dono = usuarioRepository.findByUsername(usernameLogado)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         Formulario novoFormulario = new Formulario();
         novoFormulario.setTitulo(dto.getTitulo());
         novoFormulario.setDescricao(dto.getDescricao());
         novoFormulario.setSolicitaEmail(dto.isSolicitaEmail());
+        novoFormulario.setUsuario(dono);
 
         // Verifica se vieram perguntas no JSON
         if (dto.getPerguntas() != null) {
@@ -76,5 +86,9 @@ public class FormularioService {
         // o formulário, depois as perguntas, e depois as opções na ordem certinha!
         // O Repository traduz isso para o comando SQL "INSERT INTO formularios..."
         return repository.save(novoFormulario);
+    }
+
+    public List<Formulario> listarMeusFormularios(String usernameLogado) {
+        return repository.findByUsuarioUsername(usernameLogado);
     }
 }

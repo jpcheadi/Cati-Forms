@@ -18,6 +18,7 @@ async function requisitar(metodo, caminho, corpo) {
   if (corpo !== undefined) headers["Content-Type"] = "application/json";
   if (!ehPublica && !ehLogin) {
     const token = Auth.token();
+    console.log("Token que será enviado:", token);
     if (token) headers["Authorization"] = `Bearer ${token}`;
   }
 
@@ -55,12 +56,12 @@ const Api = {
   criarFormulario: (formulario) => requisitar("POST", "/formularios", formulario),
   listarFormularios: () => requisitar("GET", "/formularios"),
   detalharFormulario: (id) => requisitar("GET", `/formularios/${id}`),
-  listarRespostas: (id) => requisitar("GET", `/formularios/${id}/respostas`),
+  // listarRespostas: (id) => requisitar("GET", `/formularios/${id}/respostas`),
 
   // Rotas públicas (RF09–RF13) — usam o codigo (UUID), sem token
-  buscarFormularioPublico: (codigo) => requisitar("GET", `/public/forms/${encodeURIComponent(codigo)}`),
+  buscarFormularioPublico: (codigo) => requisitar("GET", `/formularios/public/${encodeURIComponent(codigo)}`),
   enviarRespostas: (codigo, respostas) =>
-    requisitar("POST", `/public/forms/${encodeURIComponent(codigo)}/responses`, respostas),
+    requisitar("POST", `/formularios/public/${encodeURIComponent(codigo)}/responses`, respostas),
 
   // Exportação CSV/PDF (RF15, RF16): devolve arquivo, não JSON -> Fase 8.
 };

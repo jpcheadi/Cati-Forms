@@ -28,6 +28,11 @@ public class Formulario {
     public List<Pergunta> getPerguntas() { return perguntas; }
     public void setPerguntas(List<Pergunta> perguntas) { this.perguntas = perguntas; }
 
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    @com.fasterxml.jackson.annotation.JsonIgnore // Evita erro de recursão ao devolver o JSON
+    private Usuario usuario;
+    
     public Formulario() {}
 
     // Getters e Setters 
@@ -40,6 +45,9 @@ public class Formulario {
     public String getDescricao() { return descricao; }
     public void setDescricao(String descricao) { this.descricao = descricao; }
     
+    public Usuario getUsuario() { return usuario; }
+    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
+
     public boolean isSolicitaEmail() { return solicitaEmail; }
     public void setSolicitaEmail(boolean solicitaEmail) { this.solicitaEmail = solicitaEmail; }
 }
