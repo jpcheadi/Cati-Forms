@@ -49,6 +49,13 @@ public class FormularioController {
         return ResponseEntity.ok(form);
     }
 
+    @GetMapping
+    public ResponseEntity<List<Formulario>> listarMeusFormularios(Principal principal) {
+        // Busca todos os formulários salvos no banco
+        List<Formulario> lista = service.listarMeusFormularios(principal.getName());
+        return ResponseEntity.ok(lista);
+    }
+    
     @PostMapping
     public ResponseEntity<Formulario> criarFormulario(@RequestBody FormularioRequestDTO dto, Principal principal) {
     //      A anotação @RequestBody avisa o Spring para pegar o JSON que veio no corpo 
@@ -60,16 +67,25 @@ public class FormularioController {
     //     // Retorna status 201 (Created) e os dados do formulário recém-criado (incluindo o UUID gerado)
          return ResponseEntity.status(201).body(formCriado);
     }
+    
     // 2. O Candidato clica em "Enviar" e salva a Submissao
 
-    // Adicione este método junto aos outros (na área que exige token JWT)
-    @GetMapping
-    public ResponseEntity<List<Formulario>> listarTodos() {
-        // Busca todos os formulários salvos no banco
-        List<Formulario> lista = formularioRepository.findAll();
-        return ResponseEntity.ok(lista);
-    }
+    @GetMapping("/{id}/respostas")
+    public ResponseEntity<?> listarRespostasDoFormulario(@PathVariable UUID id, Principal principal) {
+        // 1. Busca o formulário
+        Formulario form = formularioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Formulário não encontrado"));
+        
+        // 2. Trava de Segurança: Verifica se o formulário pertence a quem está logado
+        if (!form.getUsuario().getUsername().equals(principal.getName())) {
+            return ResponseEntity.status(403).body(java.util.Map.of("erro", "Você não tem permissão para ver estas respostas."));
+        }
 
+        // 3. Busca todas as submissões desse formulário
+        List<Submissao> submissoes = submissaoRepository.findByFormularioId(id);
+        
+        return ResponseEntity.ok(submissoes);
+    }
     
     @PostMapping("/public/{id}/responses")
     public ResponseEntity<?> receberSubmissao(
