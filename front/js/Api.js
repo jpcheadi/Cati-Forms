@@ -59,7 +59,8 @@ const Api = {
   listarRespostas: (id) => requisitar("GET", `/formularios/${id}/respostas`),
 
   // Rotas públicas (RF09–RF13) — usam o codigo (UUID), sem token
-  buscarFormularioPublico: (codigo) => requisitar("GET", `/formularios/public/${encodeURIComponent(codigo)}`),
+  // buscarFormularioPublico: (codigo) => requisitar("GET", `/formularios/public/${encodeURIComponent(codigo)}`),
+  buscarFormularioPublico: (id) => requisitar("GET", `/formularios/public/${id}`),
   enviarRespostas: (codigo, respostas) =>
     requisitar("POST", `/formularios/public/${encodeURIComponent(codigo)}/responses`, respostas),
 

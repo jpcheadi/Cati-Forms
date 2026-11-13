@@ -21,6 +21,7 @@ public class Submissao {
 
     @ManyToOne
     @JoinColumn(name = "formulario_id", nullable = false)
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private Formulario formulario;
 
     // Uma submissão tem várias respostas dentro dela

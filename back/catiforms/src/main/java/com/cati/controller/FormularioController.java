@@ -49,6 +49,17 @@ public class FormularioController {
         return ResponseEntity.ok(form);
     }
 
+    // Mapeia uma requisição GET para a URL /api/formularios/{id}
+    @GetMapping("/public/{id}")
+    public ResponseEntity<Formulario> buscarFormularioPublico(@PathVariable UUID id) {
+        // 1. O Controller recebe o ID da URL
+        // 2. Entrega para o Service processar
+        Formulario form = service.buscarPorId(id);
+        
+        // 3. Devolve a resposta com status 200 (OK)
+        return ResponseEntity.ok(form);
+    }
+
     @GetMapping
     public ResponseEntity<List<Formulario>> listarMeusFormularios(Principal principal) {
         // Busca todos os formulários salvos no banco
@@ -58,16 +69,12 @@ public class FormularioController {
     
     @PostMapping
     public ResponseEntity<Formulario> criarFormulario(@RequestBody FormularioRequestDTO dto, Principal principal) {
-    //      A anotação @RequestBody avisa o Spring para pegar o JSON que veio no corpo 
-    //      da requisição e converter automaticamente para o objeto FormularioRequestDTO  
-    // O filtro do Spring Security intercepta o token de sessão, abre, lê quem é o dono dele e cria o objeto Principal
-        
          Formulario formCriado = service.criarFormulario(dto, principal.getName());
         
     //     // Retorna status 201 (Created) e os dados do formulário recém-criado (incluindo o UUID gerado)
          return ResponseEntity.status(201).body(formCriado);
     }
-    
+
     // 2. O Candidato clica em "Enviar" e salva a Submissao
 
     @GetMapping("/{id}/respostas")
@@ -113,6 +120,21 @@ public class FormularioController {
                         .orElseThrow(() -> new RuntimeException("Pergunta não encontrada: " + respostaDto.getPerguntaId()));
                 
                 resposta.setPergunta(pergunta);
+                
+                // Monta o campo 'valor' com segurança para nunca ficar nulo
+                if (respostaDto.getValor() != null && !respostaDto.getValor().isBlank()) {
+                    resposta.setValor(respostaDto.getValor());
+                } else if (respostaDto.getOpcoesIds() != null && !respostaDto.getOpcoesIds().isEmpty()) {
+                    resposta.setValor("Opções selecionadas (IDs): " + respostaDto.getOpcoesIds().toString());
+                } else if (respostaDto.getOpcaoId() != null) {
+                    String texto = "Opção ID: " + respostaDto.getOpcaoId();
+                    if (respostaDto.getJustificativa() != null && !respostaDto.getJustificativa().isBlank()) {
+                        texto += " | Justificativa: " + respostaDto.getJustificativa();
+                    }
+                    resposta.setValor(texto);
+                } else {
+                    resposta.setValor("Sem resposta");
+                }
                 
                 // Guarda a resposta na lista da submissão
                 submissao.getRespostas().add(resposta);

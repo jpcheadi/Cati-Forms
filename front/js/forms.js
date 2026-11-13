@@ -1,7 +1,7 @@
 // js/forms.js
 
 // Endereço base do Backend em Spring Boot
-const API_BASE_URL = "http://localhost:8080/api/formularios/public/${codigo}/responses";
+const API_BASE_URL = "http://localhost:8080/api/formularios/public";
 let formularioAtualId = null;
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -126,9 +126,10 @@ document.getElementById("form-responder").addEventListener("submit", async (ev) 
 
   for (let [name, value] of formData.entries()) {
     if (name.startsWith("pergunta_")) {
+      const idTexto = name.split("_")[1];
       const perguntaId = name.split("_")[1];
       
-      // Como checkbox pode ter vários valores com o mesmo nome, garantimos que só processamos 1 vez por pergunta
+      // Como checkbox pode ter vários valores com o mesmo nome, processa 1 vez por pergunta
       if (!perguntasProcessadas.has(perguntaId)) {
         perguntasProcessadas.add(perguntaId);
         
@@ -136,18 +137,22 @@ document.getElementById("form-responder").addEventListener("submit", async (ev) 
         const inputHTML = formElement.querySelector(`[name="${name}"]`);
         const tipo = inputHTML.dataset.tipo;
 
-        let respostaItem = { perguntaId: parseInt(perguntaId) };
+        let respostaItem = { perguntaId: (perguntaId) };
 
         if (tipo === "DISCURSIVA") {
-          respostaItem.texto = formData.get(name);
+          respostaItem.valor = formData.get(name);
         } 
         else if (tipo === "MULTIPLA_ESCOLHA") {
-          // Pega todas as opções marcadas com esse nome (retorna um array)
-          respostaItem.opcoesIds = formData.getAll(name).map(v => parseInt(v));
+          const selecionadas = formData.getAll(name).map(id => Number(id));
+          respostaItem.opcoesIds = selecionadas;
+          respostaItem.valor = selecionadas.join(", "); // Garante que valor não vai nulo
         } 
         else if (tipo === "ESCOLHA_UNICA_JUSTIFICADA") {
-          respostaItem.opcaoId = parseInt(formData.get(name));
-          respostaItem.justificativa = formData.get(`justificativa_${perguntaId}`);
+          const opcao = Number(formData.get(name));
+          const justificativa = formData.get(`justificativa_${idTexto}`);
+          respostaItem.opcaoId = opcao;
+          respostaItem.justificativa = justificativa;
+          respostaItem.valor = `${opcao} - Justificativa: ${justificativa}`; // Garante que valor não vai nulo
         }
 
         submissao.respostas.push(respostaItem);
@@ -157,7 +162,7 @@ document.getElementById("form-responder").addEventListener("submit", async (ev) 
 
   try {
     // 4. ENVIA OS DADOS PARA O BACKEND VIA POST
-    const respostaServidor = await fetch(`${API_BASE_URL}/${formularioAtualId}/respostas`, {
+    const respostaServidor = await fetch(`${API_BASE_URL}/${formularioAtualId}/responses`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(submissao) // Transforma o objeto JS em texto JSON
