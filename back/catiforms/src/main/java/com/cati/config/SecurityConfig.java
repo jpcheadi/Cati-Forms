@@ -46,7 +46,6 @@ public class SecurityConfig {
                 // 3. Libera APENAS as rotas com "/public/" para os candidatos (Responder provas)
                 .requestMatchers(HttpMethod.GET, "/api/formularios/public/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/formularios/public/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/formularios/public/**/responses").permitAll()
                 
                 // 4. BLOQUEIA TODO O RESTO! Rotas como "GET /api/formularios" caem aqui e exigirão o Token
                 .anyRequest().authenticated() 

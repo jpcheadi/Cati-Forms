@@ -143,16 +143,20 @@ document.getElementById("form-responder").addEventListener("submit", async (ev) 
           respostaItem.valor = formData.get(name);
         } 
         else if (tipo === "MULTIPLA_ESCOLHA") {
-          const selecionadas = formData.getAll(name).map(id => Number(id));
+          const selecionadas = formData.getAll(name);
           respostaItem.opcoesIds = selecionadas;
-          respostaItem.valor = selecionadas.join(", "); // Garante que valor não vai nulo
+          respostaItem.valor = [...formElement.querySelectorAll(`[name="${name}"]:checked`)]
+            .map(input => input.closest("label")?.querySelector("[data-texto]")?.textContent || input.value)
+            .join(", ");
         } 
         else if (tipo === "ESCOLHA_UNICA_JUSTIFICADA") {
-          const opcao = Number(formData.get(name));
+          const opcao = formData.get(name);
           const justificativa = formData.get(`justificativa_${idTexto}`);
           respostaItem.opcaoId = opcao;
           respostaItem.justificativa = justificativa;
-          respostaItem.valor = `${opcao} - Justificativa: ${justificativa}`; // Garante que valor não vai nulo
+          const inputSelecionado = formElement.querySelector(`[name="${name}"]:checked`);
+          const textoOpcao = inputSelecionado?.closest("label")?.querySelector("[data-texto]")?.textContent || opcao;
+          respostaItem.valor = `${textoOpcao} - Justificativa: ${justificativa}`;
         }
 
         submissao.respostas.push(respostaItem);

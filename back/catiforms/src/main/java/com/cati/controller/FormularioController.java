@@ -13,6 +13,7 @@ import com.cati.repository.PerguntaRepository;
 import com.cati.repository.SubmissaoRepository;
 import com.cati.service.FormularioService;
 import org.springframework.http.ResponseEntity;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -68,7 +69,7 @@ public class FormularioController {
     }
     
     @PostMapping
-    public ResponseEntity<Formulario> criarFormulario(@RequestBody FormularioRequestDTO dto, Principal principal) {
+    public ResponseEntity<Formulario> criarFormulario(@Valid @RequestBody FormularioRequestDTO dto, Principal principal) {
          Formulario formCriado = service.criarFormulario(dto, principal.getName());
         
     //     // Retorna status 201 (Created) e os dados do formulário recém-criado (incluindo o UUID gerado)

@@ -4,41 +4,60 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Respostas · CATI Forms</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Instrument+Sans:wght@400;600;700&display=swap">
-<link rel="stylesheet" href="../css/style.css"><link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/components.css">
 </head>
 <body>
-<header class="topbar"><div class="container topbar__inner">
-  <a class="brand" href="dashboard.html">CATI <span>Forms</span></a>
-  <nav class="nav"><a href="dashboard.html">Formulários</a><a class="btn btn-sm" href="criar-formulario.html">Novo formulário</a><button class="btn btn-dark btn-sm" id="btn-sair" type="button">Sair</button></nav>
-</div></header>
+<header class="topbar">
+  <div class="container topbar__inner">
+    <a class="brand" href="dashboard.html">CATI <span>Forms</span></a>
+    <nav class="nav">
+      <a href="dashboard.html">Formulários</a>
+      <a class="btn btn-sm" href="criar-formulario.html">Novo formulário</a>
+      <button class="btn btn-dark btn-sm" id="btn-sair" type="button">Sair</button>
+    </nav>
+  </div>
+</header>
+
 <main class="container page">
   <div id="msg" class="alert alert--erro" role="alert" hidden></div>
+
   <header class="stack">
     <a href="dashboard.html">← Formulários</a>
-    <h1 id="titulo">Banco de Talentos 2026</h1>
-    <p id="descricao" class="muted">Conte um pouco sobre você.</p>
-    <div class="row"><span class="badge" id="total">12 respostas</span>
-      <button class="btn btn-sm" id="btn-csv" type="button">Exportar CSV</button>
-      <button class="btn btn-sm" id="btn-pdf" type="button">Exportar PDF</button></div>
+    <h1 id="titulo">Carregando respostas...</h1>
+    <p id="descricao" class="muted"></p>
+    <div class="row">
+      <span class="badge" id="total">0 respostas</span>
+      <button class="btn btn-sm" id="btn-csv" type="button" disabled>Exportar CSV</button>
+      <button class="btn btn-sm" id="btn-pdf" type="button" disabled>Exportar PDF</button>
+    </div>
   </header>
 
-  <section id="lista-respostas" class="stack" style="margin-top:1.5rem" aria-label="Respostas recebidas">
-    <!-- Exemplo estático: o JavaScript vai gerar um card por resposta -->
-    <article class="card">
-      <div class="row row--between"><h2>Resposta #90</h2><span class="muted">candidato@exemplo.com</span></div>
-      <dl class="answer">
-        <dt>Fale sobre um projeto seu.</dt><dd>Fiz um jogo em Python.</dd>
-        <dt>Quais linguagens você usa?</dt><dd>Java, Python</dd>
-        <dt>Qual área prefere?</dt><dd>Backend<br><span class="muted">Justificativa: gosto de lógica e bancos de dados.</span></dd>
-      </dl>
-    </article>
-  </section>
-  <div id="vazio" class="empty" hidden><h2>Sem respostas por enquanto</h2><p style="margin-inline:auto">Compartilhe o link do formulário para começar a receber.</p></div>
+  <!-- O JavaScript vai injetar os clones do template abaixo aqui dentro -->
+  <section id="lista-respostas" class="stack" style="margin-top:1.5rem" aria-label="Respostas recebidas"></section>
+
+  <div id="vazio" class="empty" hidden>
+    <h2>Sem respostas por enquanto</h2>
+    <p style="margin-inline:auto">Compartilhe o link do formulário para começar a receber.</p>
+  </div>
 </main>
+
+<!-- TEMPLATE: Molde para cada card de submissão -->
+<template id="tpl-card-resposta">
+  <article class="card">
+    <div class="row row--between">
+      <h2 data-titulo-resposta></h2>
+      <span class="muted" data-email></span>
+    </div>
+    <dl class="answer" data-lista-respostas-item></dl>
+  </article>
+</template>
+
 <script src="../js/auth.js"></script>
-<script src="../js/api.js"></script>
+<script src="../js/Api.js"></script>
 <script src="../js/respostas.js"></script>
 </body>
 </html>

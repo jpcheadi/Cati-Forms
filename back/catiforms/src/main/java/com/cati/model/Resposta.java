@@ -19,6 +19,7 @@ public class Resposta {
 
     @ManyToOne
     @JoinColumn(name = "submissao_id", nullable = false)
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private Submissao submissao;
 
     // --- Getters e Setters ---
