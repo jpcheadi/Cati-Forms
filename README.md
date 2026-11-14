@@ -1,6 +1,6 @@
 # 📝 CATI Forms
 
-![Status](https://img.shields.io/badge/Status-Em_Desenvolvimento-yellow)
+![Status](https://img.shields.io/badge/Status-Em_Desenvolvimento-sucess)
 ![Java](https://img.shields.io/badge/Java-Spring_Boot-success)
 ![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-blue)
 ![Frontend](https://img.shields.io/badge/Frontend-HTML_|_CSS_|_JS-orange)
